@@ -1,10 +1,18 @@
 var mysql = require("mysql")
 var pool = mysql.createPool({
-    host:"localhost",
-    user:"root",
-    password:"qazwsx321",
+    host:"sh-cynosdbmysql-grp-oliz6c36.sql.tencentcdb.com",
+    port: 21070,
+    user:"fjh",
+    password:"yDLdNLyx22fk0y",
     database:"cc"
-})//数据库连接配置
+})
+//数据库连接配置 
+// var pool = mysql.createPool({
+//     host:"localhost",
+//     user:"root",
+//     password:"qazwsx321",
+//     database:"cc"
+// })
 
 function query(sql,callback){
     pool.getConnection(function(err,connection){

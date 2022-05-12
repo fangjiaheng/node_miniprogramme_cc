@@ -28,7 +28,7 @@ router.post("/signin",(req, res)=>{
     // console.log('参数', req.body)
     // console.log('查看是否拿的到用户信息', req.auth.openid)
     // 1.用户表更新最新签到日期和硬币数量
-    db.query(`update wxuser set coins=coins+20, lastsigndate='${ req.body.date }' where user_id = '${req.auth.openid}'`, (err, result) => {
+    db.query(`update wxuser set coins=coins+100, lastsigndate='${ req.body.date }' where user_id = '${req.auth.openid}'`, (err, result) => {
         res.send({
             status: 200,
             messages: '签到成功'
