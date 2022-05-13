@@ -14,7 +14,7 @@ const signinRouter = require('./routes/signin')
 const taskRouter = require('./routes/task')
 const mallRouter = require('./routes/mall')
 const { errorHandler } = require('./utils/common')
-const PORT = 3000
+const PORT = 4001
 
 class AppConfig {
     constructor(app) {

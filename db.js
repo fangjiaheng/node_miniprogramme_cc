@@ -1,6 +1,10 @@
 var mysql = require("mysql")
 var pool = mysql.createPool({
-
+    host:"sh-cynosdbmysql-grp-oliz6c36.sql.tencentcdb.com",
+    port: 21070,
+    user:"fjh",
+    password:"yDLdNLyx22fk0y",
+    database:"cc"
 })
 
 function query(sql,callback){
