@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 // 导入数据库操作模块
 const db = require('../db.js')
-const { formatTime } = require('../utils/common')
+const { formatTime, encodeEmoji, deCodeEmoji } = require('../utils/common')
 
 // 获取商城列表
 // router.get("/malllist",(req, res)=>{
@@ -22,14 +22,15 @@ const { formatTime } = require('../utils/common')
 // 兑换奖励
 router.post("/exchangegoods",(req, res)=>{
     console.log(req.body)
-    let { goodsid, consume } = req.body
+    let { goodsid, goodsname, consume } = req.body
+    let goodsName = encodeEmoji(goodsname)
     // 查询硬币数量是否够
     db.query(`select coins from wxuser where user_id='${req.auth.openid}'`, (err, result) => {
         // console.log('result coins', result[0].coins)
         let lefCoins = result[0].coins
         if(lefCoins > consume) {
             // 向兑换记录表添加一条兑换的记录
-            db.query(`insert into exchange_record(user_id,goods_id,time) values('${req.auth.openid}', ${goodsid}, '${formatTime(new Date())}')`, (err, result) => {
+            db.query(`insert into exchange_record(user_id,goods_id,goods_name,time) values('${req.auth.openid}', ${goodsid}, '${goodsName}', '${formatTime(new Date())}')`, (err, result) => {
                 console.log(result)
             })
             // 消耗硬币数量
@@ -48,5 +49,19 @@ router.post("/exchangegoods",(req, res)=>{
         }
     })
 })
- 
- module.exports = router
+
+// 获取用户礼物兑换情况
+router.get("/exchangerecord",(req, res)=>{
+    let sql = `select goods_id, goods_name, time from exchange_record where user_id ='${req.auth.openid}'`
+    db.query(sql, (err, result) => {
+        console.log('result exchangerecord', result)
+        result.forEach(item => item.goods_name = deCodeEmoji(item.goods_name))
+        res.send({
+            status: 200,
+            list: result,
+            messages: '查询成功'
+        })
+    })
+})
+
+module.exports = router
